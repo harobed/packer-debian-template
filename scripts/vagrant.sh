@@ -20,8 +20,3 @@ chown -R root:root /root/.ssh
 
 # Customize the message of the day
 echo 'Welcome to your Vagrant-built virtual machine.' > /var/run/motd
-
-# Install NFS client
-apt-get -y install nfs-common
-
-
