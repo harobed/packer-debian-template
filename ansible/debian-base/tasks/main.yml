@@ -1,0 +1,41 @@
+---
+- include: backports.yml
+- include: unattended-upgrades.yml
+
+- name: Debian Upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - packages
+
+- name: Install apt-transport-https ca-certificates gnupg2
+  apt: name={{ item }} state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - gnupg2
+    - python-pip
+    - unattended-upgrades
+    - vim
+    - mc
+    - curl
+    - bash-completion
+  tags:
+    - packages
+
+- name: Check if bash-completion in enable for root user
+  command: grep -q "/etc/bash_completion" /root/.bashrc
+  register: check_bashcompletion_enabled
+  failed_when: False 
+
+- name: Enable bach-completion for root user
+  command: cp /etc/skel/.bashrc /root/.bashrc
+  when: check_bashcompletion_enabled.rc == 1
+
+- name: Upgrade pip
+  pip: name=pip==9.0.1 state=present
+
+- name: Enable ntp date
+  command: /usr/bin/timedatectl set-ntp true

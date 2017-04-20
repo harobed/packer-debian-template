@@ -1,0 +1,17 @@
+---
+- name: Upload Systemd docker.service
+  copy:
+    src: docker.service
+    dest: /lib/systemd/system/docker.service
+  register: docker_service
+  tags:
+    - packages
+
+- name: Reload docker service
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: docker
+  when: docker_service.changed
+  tags:
+    - packages

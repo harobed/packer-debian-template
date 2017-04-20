@@ -1,0 +1,59 @@
+---
+- name: Configure overlay kernel module at boot
+  copy:
+    src: overlay.conf
+    dest: /etc/modules-load.d/overlay.conf
+
+- apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - packages
+
+- name: Add Docker Debian source list
+  copy:
+    src: docker.list
+    dest: /etc/apt/sources.list.d/docker.list
+  register: docker_source
+  tags:
+    - packages
+
+- name: Add Docker key
+  command: apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+  when: docker_source.changed
+  tags:
+    - packages
+
+- apt:
+    update_cache: yes
+  when: docker_source.changed
+  tags:
+    - packages
+
+- name: Install docker-engine
+  apt: name=docker-engine state=present
+  tags:
+    - packages
+
+- include: fix_docker_service.yml
+  tags:
+    - packages
+
+- name: Config Docker parameters
+  lineinfile:
+    dest: /etc/default/docker
+    regexp: "^DOCKER_OPTS="
+    line: DOCKER_OPTS="--storage-driver=overlay2 --log-driver=journald"
+  register: docker_config
+  tags:
+    - docker-config
+    - packages
+
+- name: Install docker-py
+  pip: name={{ item }} state=present
+  with_items:
+    - pip==9.0.1
+    - docker
+    - docker-compose
+  tags:
+    - packages

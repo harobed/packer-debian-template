@@ -1,0 +1,7 @@
+Package: linux-image-amd64
+Pin: release a=jessie-backports
+Pin-Priority: 2000
+
+Package: linux-base
+Pin: release a=jessie-backports
+Pin-Priority: 2000

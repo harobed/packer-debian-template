@@ -51,6 +51,10 @@
   "post-processors": ["vagrant"],
   "provisioners": [
     {
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
       "type": "shell",
       "pause_before": "5s",
       "execute_command": "echo 'vagrant'| {{.Vars}} sudo --preserve-env --stdin sh '{{.Path}}'",

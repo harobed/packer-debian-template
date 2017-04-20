@@ -1,0 +1,7 @@
+---
+- name: Configure unattended-upgrades
+  copy:
+    src: 10periodic
+    dest: /etc/apt/apt.conf.d/10periodic
+  tags:
+    - packages

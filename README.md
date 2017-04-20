@@ -7,12 +7,14 @@
 * Use French apt sources.list mirror
 * French keyboard
 * Vagrant ssh key are installed on vagrant and root users
+* Kernel backport installed
+* Last Docker Engine is installed with `overlay2` storage driver
 
 
 ## Prerequisites
 
 ```
-$ brew cask install packer vagrant virtualbox
+$ brew cask install packer vagrant virtualbox ansible
 ```
 
 ## Build vagrant box
@@ -40,6 +42,14 @@ To use this image with Vagrant, create a vagrant file:
 ```bash
 $ vagrant init sk-debian-8
 ```
+
+
+Add this line in `Vagrantfile`:
+
+```
+config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+```
+
 
 And initialize the vm:
 

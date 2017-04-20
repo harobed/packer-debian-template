@@ -1,0 +1,23 @@
+- name: Add Debian backports source list
+  copy:
+    src: debian-backports.list
+    dest: /etc/apt/sources.list.d/debian-backports.list
+  tags:
+    - packages
+  register: debian_backports_source_list
+
+- name: Add Debian backports preferences
+  copy:
+    src: debian-backports.pref
+    dest: /etc/apt/preferences.d/debian-backports.pref
+  tags:
+    - packages
+  register: debian_backports_pref
+
+- name: Debian Upgrade
+  apt:
+    upgrade: dist
+    update_cache: yes
+  tags:
+    - packages
+  when: debian_backports_source_list.changed or debian_backports_pref.changed
