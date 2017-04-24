@@ -20,14 +20,17 @@ $ brew cask install packer vagrant virtualbox ansible
 ## Build vagrant box
 
 ```
+$ packer build sk-debian-8-jessie-base.json
 $ packer build sk-debian-8-jessie.json
+$ packer build sk-debian-8-jessie-docker.json
 ```
 
 
 ### Install your new box
 
-```bash
-$ vagrant box add sk-debian-8 ./packer_virtualbox-iso_virtualbox.box --force
+```
+$ vagrant box add sk-debian-8-jessie ./output/sk-debian-8-jessie.box --force
+$ vagrant box add sk-debian-8-jessie-docker ./output/sk-debian-8-jessie-docker.box --force
 ```
 
 The VM image has been imported to vagrant, it's now available on your system.
@@ -39,7 +42,7 @@ The VM image has been imported to vagrant, it's now available on your system.
 
 To use this image with Vagrant, create a vagrant file:
 
-```bash
+```
 $ vagrant init sk-debian-8
 ```
 
@@ -53,6 +56,6 @@ config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
 
 And initialize the vm:
 
-```bash
+```
 $ vagrant up
 ```

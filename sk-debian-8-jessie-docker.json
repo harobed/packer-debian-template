@@ -14,11 +14,28 @@
       "vm_name": "debian"
     }
   ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "pause_before": "5s",
+      "execute_command": "echo 'vagrant'| {{.Vars}} sudo --preserve-env --stdin sh '{{.Path}}'",
+      "environment_vars": [
+         "VAGRANT_BUILDER_FS=/"
+      ],
+      "scripts": [
+        "scripts/minimize.sh"
+      ]
+    }
+  ],
   "post-processors": [
     [
       {
         "type": "vagrant",
-        "output": "output/sk-debian-8-jessie.box"
+        "output": "output/sk-debian-8-jessie-docker.box"
       }
     ]
   ]
